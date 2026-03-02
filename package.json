@@ -1,0 +1,40 @@
+{
+  "name": "playwright-ts-template",
+  "version": "1.0.0",
+  "description": "Base Playwright project with TypeScript and wico agent skills.",
+  "license": "MIT",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "report": "playwright show-report",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "typecheck": "tsc --noEmit",
+    "pw:setup": "npx playwright install --with-deps",
+    "postinstall": "npx playwright install"
+  },
+  "keywords": [
+    "typescript",
+    "playwright",
+    "e2e",
+    "testing",
+    "wico-playwright-agent-skills"
+  ],
+  "dependencies": {
+    "@playwright/test": "^1.52.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "@types/node": "^22.12.0",
+    "eslint": "^9.18.0",
+    "eslint-plugin-playwright": "^2.2.0",
+    "prettier": "^3.4.0",
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.20.0",
+    "wico-playwright-agent-skills": "^1.0.0"
+  }
+}

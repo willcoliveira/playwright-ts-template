@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@pages/*": ["src/pages/*"],
+      "@tests/*": ["src/tests/*"],
+      "@helpers/*": ["src/helpers/*"],
+      "@test-data/*": ["src/test-data/*"]
+    }
+  },
+  "include": ["src", "playwright.config.ts"]
+}
