@@ -24,17 +24,15 @@
     "testing",
     "wico-playwright-agent-skills"
   ],
-  "dependencies": {
-    "@playwright/test": "^1.52.0"
-  },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
+    "@playwright/test": "^1.59.1",
     "@types/node": "^22.12.0",
     "eslint": "^9.18.0",
     "eslint-plugin-playwright": "^2.2.0",
     "prettier": "^3.4.0",
     "typescript": "^5.7.0",
     "typescript-eslint": "^8.20.0",
-    "wico-playwright-agent-skills": "^1.0.0"
+    "wico-playwright-agent-skills": "^1.1.0"
   }
 }

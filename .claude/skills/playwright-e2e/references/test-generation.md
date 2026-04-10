@@ -8,6 +8,7 @@ src/pages/            # Page objects
 src/pages/components/ # Shared UI components
 src/helpers/                     # API helpers, utilities
 src/test-data/                   # Test data (static constants)
+src/utils/                       # Shared utilities (timeouts)
 ```
 
 <!-- YOUR PROJECT: Update the file structure to match your project -->
@@ -58,6 +59,7 @@ import { test, expect } from '@playwright/test';
 
 ```typescript
 import type { Page, Locator } from '@playwright/test';
+
 import { test } from '@playwright/test';
 
 export class ExamplePage {
