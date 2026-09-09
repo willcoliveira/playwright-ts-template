@@ -11,3 +11,8 @@ all-blob-reports
 .cursor
 .env
 .env.*
+.auth
+playwright/.cache
+README.md
+CHANGELOG.md
+Makefile

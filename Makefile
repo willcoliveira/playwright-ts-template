@@ -50,8 +50,11 @@ docker-build: ## Build Docker image
 	docker build -t $(DOCKER_IMAGE) .
 
 .PHONY: docker-test
-docker-test: docker-build ## Build and run tests in Docker
-	docker run --rm $(DOCKER_IMAGE)
+docker-test: docker-build ## Build, run the tests in Docker, copy the HTML report to ./playwright-report
+	-docker rm -f $(DOCKER_IMAGE)-run >/dev/null 2>&1
+	-docker run --name $(DOCKER_IMAGE)-run --init --ipc=host $(DOCKER_IMAGE) npx playwright test --reporter=list,html
+	rm -rf playwright-report && docker cp $(DOCKER_IMAGE)-run:/app/playwright-report ./playwright-report
+	docker rm $(DOCKER_IMAGE)-run >/dev/null
 
 .PHONY: docker-clean
 docker-clean: ## Remove Docker image
@@ -89,7 +92,7 @@ typecheck: ## Run TypeScript type checking
 
 ## —— Cleanup ————————————————————————————————————————————
 .PHONY: clean
-clean: ## Remove generated artifacts
+clean: ## Remove node_modules and generated artifacts
 	rm -rf node_modules playwright-report test-results blob-report all-blob-reports
 
 ## —— Help ———————————————————————————————————————————————
