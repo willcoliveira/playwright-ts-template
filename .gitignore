@@ -28,3 +28,7 @@ Thumbs.db
 
 # Build
 dist/
+
+# Playwright CLI session data and merged blob reports
+.playwright-cli/
+all-blob-reports/

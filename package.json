@@ -1,38 +1,47 @@
 {
   "name": "playwright-ts-template",
-  "version": "1.0.0",
-  "description": "Base Playwright project with TypeScript and wico agent skills.",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Playwright + TypeScript project template with AI agent skills (wico) for Claude Code, Cursor, Copilot and Codex.",
   "license": "MIT",
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "scripts": {
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
     "test:debug": "playwright test --debug",
+    "test:chromium": "playwright test --project=chromium",
     "report": "playwright show-report",
+    "report:merge": "playwright merge-reports --reporter html ./all-blob-reports",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "typecheck": "tsc --noEmit",
-    "pw:setup": "npx playwright install --with-deps",
-    "postinstall": "npx playwright install"
+    "pw:setup": "playwright install --with-deps",
+    "skills:sync": "wico-playwright-agent-skills init --platforms claude,cursor,copilot --packs core,templates --project-name playwright-ts-template --base-url https://playwright.dev --fixture-import-path none --page-objects-dir src/pages --test-dir src/tests --yes --force --clean-legacy && playwright init-skills --loop claude && playwright init-skills --loop agents",
+    "skills:check": "npm run skills:sync --silent && git diff --exit-code --stat -- .claude .agents .cursor .github/instructions .github/copilot-instructions.md"
   },
   "keywords": [
     "typescript",
     "playwright",
     "e2e",
     "testing",
+    "template",
+    "agent-skills",
     "wico-playwright-agent-skills"
   ],
   "devDependencies": {
-    "@eslint/js": "^9.18.0",
-    "@playwright/test": "^1.59.1",
-    "@types/node": "^22.12.0",
-    "eslint": "^9.18.0",
-    "eslint-plugin-playwright": "^2.2.0",
-    "prettier": "^3.4.0",
-    "typescript": "^5.7.0",
-    "typescript-eslint": "^8.20.0",
-    "wico-playwright-agent-skills": "^1.1.0"
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^22.19.13",
+    "eslint": "^10.10.0",
+    "eslint-plugin-playwright": "^2.11.0",
+    "prettier": "^3.9.6",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.70.0",
+    "wico-playwright-agent-skills": "^2.0.0"
   }
 }

@@ -1,68 +1,68 @@
 # playwright-ts-template — Agent Instructions
 
-## Project Overview
+## Project overview
 
-Playwright + TypeScript E2E testing starter project. Tests run against `https://playwright.dev` by default (configurable via `BASE_URL` env var).
+Playwright + TypeScript end-to-end test project. Tests run against `https://playwright.dev` by default; `BASE_URL` (from `.env` or the environment) points them at another application.
+
+## Skills to load
+
+- `.claude/skills/playwright-e2e/SKILL.md` — how tests are planned, written, debugged and reviewed **in this project** (references under `references/`: project conventions, page-object conventions, test generation, debugging, review, fixtures and auth, locators and assertions, CI and flake triage, API testing, pass-rate analysis, agent debugging).
+- `.claude/skills/playwright-cli/SKILL.md` — driving a browser and debugging a paused test with `playwright-cli`.
+- `.claude/skills/playwright-trace/SKILL.md` — reading a trace with `npx playwright trace`.
+
+The same skills live under `.agents/skills/` for Cursor, Codex and Copilot. They are generated — edit the generator inputs, not the files, and run `npm run skills:sync`.
 
 ## Setup
 
 ```bash
 nvm use
-npm install
-npx playwright install --with-deps
+npm ci               # no browsers are downloaded on install
+npm run pw:setup     # playwright install --with-deps
 ```
 
-## Project Structure
+## Commands
+
+```bash
+npm test                     # all projects
+npm run test:chromium        # one project
+npx playwright test --grep @smoke
+npm run test:ui              # UI mode
+npx playwright test --debug=cli   # pause + `playwright-cli attach …` for agents
+npm run lint && npm run typecheck && npm run format:check
+npm run skills:check         # generated skills must be in sync (CI enforces)
+```
+
+## Structure
 
 ```
 src/
-├── pages/              # Page Object Model classes
-│   ├── components/     # Shared UI components
-│   └── *.page.ts       # Page objects
-├── tests/              # Test spec files (*.spec.ts)
-├── helpers/            # Utility helpers
-└── test-data/          # Static test data
+├── pages/            # Page Object Model classes (*.page.ts); components/ for shared pieces
+├── tests/            # Specs (*.spec.ts)
+├── helpers/          # Utilities
+└── test-data/        # Static test data
 ```
 
-## Available Commands
+Import through the tsconfig aliases: `@pages/*`, `@tests/*`, `@helpers/*`, `@test-data/*`.
 
-```bash
-make help               # Show all available commands
-make test               # Run all tests headless
-make test-headed        # Run with visible browser
-make test-ui            # Playwright UI mode
-make lint               # ESLint check
-make format-check       # Prettier check
-make typecheck          # TypeScript type check
-```
+## Conventions
 
-## Coding Conventions
+### Page objects
 
-### Page Object Model
+- One class per page in `src/pages/{name}.page.ts`; locators as `readonly` fields set in the constructor.
+- Actions wrapped in `test.step()`; assertion helpers prefixed `expect…`.
+- Navigation through `page.goto('/relative')` — `baseURL` comes from the config.
 
-- File naming: `{name}.page.ts` in `src/pages/`
-- Locators as `readonly` class properties in constructor
-- Methods wrapped in `test.step()` for trace reporting
-- Assertion methods prefixed with `expect`
+### Locators (in order of preference)
 
-### Selectors (priority order)
-
-1. `getByRole()` — preferred
-2. `getByLabel()` — form fields
-3. `getByText()` — visible text
-4. `getByTestId()` — data-testid attributes
-5. Never use XPath
+1. `getByRole()` 2. `getByLabel()` 3. `getByPlaceholder()` / `getByText()` 4. `getByTestId()` (`data-testid`) 5. CSS only as a last resort — never XPath.
 
 ### Tests
 
-- File naming: `{feature}.spec.ts` in `src/tests/`
-- Web-first assertions only (`await expect(locator).toBeVisible()`)
-- No `waitForTimeout()` — use web-first assertions or `waitFor()`
-- No `{ force: true }` on actions
-- Tag tests with `@smoke`, `@regression`, etc.
+- `src/tests/{feature}.spec.ts`; `test.describe('Feature', { tag: ['@smoke'] }, …)` — tags are options, not title suffixes.
+- Web-first assertions only (`await expect(locator).toBeVisible()`); no `waitForTimeout()`, no `{ force: true }`, no `test.only` (CI forbids it).
+- Every test must pass alone and in parallel with the others; no shared mutable state between tests.
+- Retries and traces are CI-only (`retries: 2`, `trace: 'on-first-retry'`); a test that only passes on retry is a bug.
 
-### Code Quality
+### Quality gates
 
-- ESLint with `eslint-plugin-playwright` rules
-- Prettier for formatting (single quotes, 140 print width, trailing commas)
-- TypeScript strict mode
+`npm run lint`, `npm run typecheck` and `npm run format:check` must pass; CI runs them together with `skills:check` and a check that the Dockerfile's Playwright image tag equals the installed `@playwright/test` version. Bumping `@playwright/test` means bumping the Dockerfile tag and re-running `npm run skills:sync`.

@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { HomePage } from '../pages/home.page';
+import { HomePage } from '@pages/home.page';
 
-test.describe('Home Page @smoke', () => {
+test.describe('Home Page', { tag: ['@smoke'] }, () => {
   let homePage: HomePage;
 
   test.beforeEach(async ({ page }) => {
@@ -17,12 +17,16 @@ test.describe('Home Page @smoke', () => {
     await homePage.expectGetStartedLink();
   });
 
+  test('should link to the docs from the main navigation', async () => {
+    await expect(homePage.nav.link('Docs')).toBeVisible();
+  });
+
   test('should navigate to the intro page', async ({ page }) => {
     await homePage.clickGetStarted();
 
     await test.step('Verify navigation to intro page', async () => {
-      await expect(page).toHaveURL(/.*docs\/intro/);
-      await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
+      await expect(page).toHaveURL(/\/docs\/intro/);
+      await expect(page.getByRole('heading', { name: 'Installation', level: 1 })).toBeVisible();
     });
   });
 });
