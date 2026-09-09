@@ -6,7 +6,7 @@ export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    ignores: ['node_modules/', 'playwright-report/', 'test-results/', 'blob-report/'],
+    ignores: ['node_modules/', 'playwright-report/', 'test-results/', 'blob-report/', 'all-blob-reports/', '.playwright-cli/'],
   },
   {
     files: ['src/tests/**/*.spec.ts'],
