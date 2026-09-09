@@ -17,6 +17,10 @@ test.describe('Home Page', { tag: ['@smoke'] }, () => {
     await homePage.expectGetStartedLink();
   });
 
+  test('should link to the docs from the main navigation', async () => {
+    await expect(homePage.nav.link('Docs')).toBeVisible();
+  });
+
   test('should navigate to the intro page', async ({ page }) => {
     await homePage.clickGetStarted();
 

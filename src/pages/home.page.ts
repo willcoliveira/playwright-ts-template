@@ -1,17 +1,18 @@
 import type { Page, Locator } from '@playwright/test';
 import { test, expect } from '@playwright/test';
+import { NavigationComponent } from '@pages/components/navigation.component';
 
 export class HomePage {
   readonly page: Page;
   readonly getStartedLink: Locator;
   readonly pageHeading: Locator;
-  readonly navLinks: Locator;
+  readonly nav: NavigationComponent;
 
   constructor(page: Page) {
     this.page = page;
     this.getStartedLink = page.getByRole('link', { name: 'Get started' });
-    this.pageHeading = page.getByRole('heading', { name: 'Playwright', level: 1 });
-    this.navLinks = page.getByRole('navigation').getByRole('link');
+    this.pageHeading = page.getByRole('heading', { name: /Playwright/, level: 1 });
+    this.nav = new NavigationComponent(page);
   }
 
   async goto() {
