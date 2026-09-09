@@ -35,7 +35,8 @@ export default defineConfig({
   use: {
     // '||' on purpose: CI passes an unset repository variable as an empty string.
     baseURL: process.env.BASE_URL || 'https://playwright.dev',
-    trace: 'on-first-retry',
+    // CI: only on the first retry; locally every failure leaves a trace to open.
+    trace: isCI ? 'on-first-retry' : 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     actionTimeout: 10_000,
