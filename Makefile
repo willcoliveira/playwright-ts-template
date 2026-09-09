@@ -5,7 +5,15 @@ DOCKER_IMAGE := playwright-ts-template
 .PHONY: install
 install: ## Install dependencies and Playwright browsers
 	npm ci
-	npx playwright install --with-deps
+	npm run pw:setup
+
+.PHONY: skills-sync
+skills-sync: ## Regenerate the AI agent skills (wico + playwright init-skills)
+	npm run skills:sync
+
+.PHONY: skills-check
+skills-check: ## Fail if the generated skills are out of sync (what CI runs)
+	npm run skills:check
 
 ## —— Tests ——————————————————————————————————————————————
 .PHONY: test
@@ -54,6 +62,10 @@ docker-clean: ## Remove Docker image
 report: ## Open the HTML test report
 	npx playwright show-report
 
+.PHONY: report-merge
+report-merge: ## Merge blob reports from ./all-blob-reports into one HTML report
+	npm run report:merge
+
 ## —— Code Quality ———————————————————————————————————————
 .PHONY: lint
 lint: ## Run ESLint
@@ -78,7 +90,7 @@ typecheck: ## Run TypeScript type checking
 ## —— Cleanup ————————————————————————————————————————————
 .PHONY: clean
 clean: ## Remove generated artifacts
-	rm -rf node_modules playwright-report test-results blob-report
+	rm -rf node_modules playwright-report test-results blob-report all-blob-reports
 
 ## —— Help ———————————————————————————————————————————————
 .PHONY: help
