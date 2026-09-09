@@ -18,6 +18,11 @@ A review of the template against Playwright 1.63, `@playwright/cli` 0.1.19, `wic
 - `playwright.config.ts` loads a local `.env` with Node's `process.loadEnvFile()` (no dotenv), sets `timeout`, `expect.timeout`, `actionTimeout`, `navigationTimeout`, `outputDir`, `testIdAttribute`, retains video on failure, and carries commented examples for mobile projects, a `storageState` setup project and `webServer`.
 - GitHub Actions: a `lint` job (ESLint, tsc, Prettier, `skills:check`, and a check that the Dockerfile base image equals the installed `@playwright/test` version), a 2-shard test matrix uploading blob reports, and a `merge-reports` job publishing one HTML report. `permissions: contents: read`.
 - Scripts: `test:chromium`, `report:merge`, `pw:setup`, `skills:sync`, `skills:check`; Makefile targets `skills-sync`, `skills-check`, `report-merge`.
+- `src/pages/components/navigation.component.ts` — a component example used by `HomePage.nav`, with a spec exercising it.
+- Workflow `workflow_dispatch` trigger; in-progress runs are cancelled only for pull requests, never on `main`; actions on their current majors (`checkout@v7`, `setup-node@v7`, `upload-artifact@v7`, `download-artifact@v8`).
+- Locally, every failing test keeps a trace (`trace: 'retain-on-failure'`); CI keeps `on-first-retry`.
+- ESLint's Playwright rules now cover page objects and components too, and `playwright/expect-expect` stays on with `assertFunctionPatterns: ['^expect']` so `page.expectX()` helpers count as assertions; `tsconfig` enables `noUnusedLocals`/`noUnusedParameters`.
+- `make docker-test` runs with `--init --ipc=host` and copies the HTML report out of the container to `./playwright-report`.
 - `CHANGELOG.md` (this file).
 
 ### Fixed
