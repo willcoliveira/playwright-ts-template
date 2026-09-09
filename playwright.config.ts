@@ -33,7 +33,8 @@ export default defineConfig({
   reporter: isCI ? [['list'], ['blob'], ['github']] : [['list'], ['html', { open: 'on-failure' }]],
 
   use: {
-    baseURL: process.env.BASE_URL ?? 'https://playwright.dev',
+    // '||' on purpose: CI passes an unset repository variable as an empty string.
+    baseURL: process.env.BASE_URL || 'https://playwright.dev',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
