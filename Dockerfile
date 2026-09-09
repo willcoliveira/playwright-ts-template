@@ -1,10 +1,15 @@
-FROM mcr.microsoft.com/playwright:v1.58.2-jammy
+# The tag MUST match the installed @playwright/test version (CI checks it):
+# the image already contains the matching browsers, so no `playwright install`.
+FROM mcr.microsoft.com/playwright:v1.63.0-noble
 
+ENV CI=1
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm ci
+# Run as the unprivileged user the image ships with.
+COPY --chown=pwuser:pwuser package*.json ./
+USER pwuser
+RUN npm ci --ignore-scripts
 
-COPY . .
+COPY --chown=pwuser:pwuser . .
 
 CMD ["npx", "playwright", "test"]
