@@ -4,6 +4,7 @@
 
 ### Security
 
+- The workflow runs on every pull request, not only those targeting `main`, so stacked PRs are checked before they are retargeted.
 - Dependabot configuration for npm (minor and patch bumps grouped, `@playwright/test` alone), GitHub Actions and the Docker base image; Dependabot alerts and security updates enabled on the repository.
 - GitHub Actions pinned to commit SHAs, with the `# vX.Y.Z` comments Dependabot maintains.
 - `.npmrc` with `ignore-scripts=true` (no package in the lockfile has an install script, so installs behave the same) and `engine-strict=true`.
