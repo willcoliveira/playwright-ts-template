@@ -17,7 +17,7 @@
 ## Test Spec Template
 
 ```typescript
-import { test, expect } from '@playwright/test'
+import { test, expect } from '@fixtures/test-fixture'
 import { TIMEOUTS } from '../utils/timeouts'
 
 test.describe('Feature name', { tag: ['@smoke'] }, () => {
@@ -48,13 +48,17 @@ Tags go in the options object (`{ tag: ['@smoke', '@checkout'] }`), never in the
 
 ## Critical Import Rules
 
-### Import from `@playwright/test`
+### MUST: Import `test` and `expect` from the fixtures file, NOT from `@playwright/test`
 
 ```typescript
-import { test, expect } from '@playwright/test'
+// CORRECT — has the custom fixtures and the same expect
+import { test, expect } from '@fixtures/test-fixture'
+
+// WRONG — plain test without custom fixtures
+import { test } from '@playwright/test'
 ```
 
-When the project grows custom fixtures, create `src/fixtures/test-fixture.ts` with `base.extend` (see `fixtures-and-auth.md`) and switch every spec to import from it.
+The fixtures file must re-export `expect` (`export { expect } from '@playwright/test'`) so specs need a single import. See `fixtures-and-auth.md` for the `base.extend` pattern.
 
 ---
 
@@ -64,7 +68,7 @@ When the project grows custom fixtures, create `src/fixtures/test-fixture.ts` wi
 
 ```typescript
 import type { Page, Locator } from '@playwright/test'
-import { test } from '@playwright/test'
+import { test } from '@fixtures/test-fixture'
 
 export class ExamplePage {
   readonly page: Page

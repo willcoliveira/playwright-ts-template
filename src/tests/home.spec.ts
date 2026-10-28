@@ -1,27 +1,23 @@
-import { test, expect } from '@playwright/test';
-import { HomePage } from '@pages/home.page';
+import { test, expect } from '@fixtures/test-fixture';
 
 test.describe('Home Page', { tag: ['@smoke'] }, () => {
-  let homePage: HomePage;
-
-  test.beforeEach(async ({ page }) => {
-    homePage = new HomePage(page);
+  test.beforeEach(async ({ homePage }) => {
     await homePage.goto();
   });
 
-  test('should display the home page heading', async () => {
+  test('should display the home page heading', async ({ homePage }) => {
     await homePage.expectPageHeading();
   });
 
-  test('should display the Get Started link', async () => {
+  test('should display the Get Started link', async ({ homePage }) => {
     await homePage.expectGetStartedLink();
   });
 
-  test('should link to the docs from the main navigation', async () => {
+  test('should link to the docs from the main navigation', async ({ homePage }) => {
     await expect(homePage.nav.link('Docs')).toBeVisible();
   });
 
-  test('should navigate to the intro page', async ({ page }) => {
+  test('should navigate to the intro page', async ({ homePage, page }) => {
     await homePage.clickGetStarted();
 
     await test.step('Verify navigation to intro page', async () => {

@@ -21,7 +21,7 @@
     "format:check": "prettier . --check",
     "typecheck": "tsc --noEmit",
     "pw:setup": "playwright install --with-deps",
-    "skills:sync": "wico-playwright-agent-skills init --platforms claude,cursor,copilot --packs core,templates --project-name playwright-ts-template --base-url https://playwright.dev --fixture-import-path none --page-objects-dir src/pages --test-dir src/tests --yes --force --clean-legacy && playwright init-skills --loop claude && playwright init-skills --loop agents",
+    "skills:sync": "wico-playwright-agent-skills init --platforms claude,cursor,copilot --packs core,templates --project-name playwright-ts-template --base-url https://playwright.dev --fixture-import-path @fixtures/test-fixture --page-objects-dir src/pages --test-dir src/tests --yes --force --clean-legacy && playwright init-skills --loop claude && playwright init-skills --loop agents",
     "skills:check": "npm run skills:sync --silent && git diff --exit-code --stat -- .claude .agents .cursor .github/instructions .github/copilot-instructions.md"
   },
   "keywords": [

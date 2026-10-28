@@ -36,13 +36,14 @@ npm run skills:check         # generated skills must be in sync (CI enforces)
 
 ```
 src/
+├── fixtures/         # test-fixture.ts — `test` extended with page-object fixtures; re-exports `expect`
 ├── pages/            # Page Object Model classes (*.page.ts); components/ for shared pieces
 ├── tests/            # Specs (*.spec.ts)
 ├── helpers/          # Utilities
 └── test-data/        # Static test data
 ```
 
-Import through the tsconfig aliases: `@pages/*`, `@tests/*`, `@helpers/*`, `@test-data/*`.
+Import through the tsconfig aliases: `@fixtures/*`, `@pages/*`, `@tests/*`, `@helpers/*`, `@test-data/*`.
 
 ## Conventions
 
@@ -58,6 +59,7 @@ Import through the tsconfig aliases: `@pages/*`, `@tests/*`, `@helpers/*`, `@tes
 
 ### Tests
 
+- Specs import `test` and `expect` from `@fixtures/test-fixture`, never from `@playwright/test`; page objects arrive as fixtures (`async ({ homePage }) => …`), so specs never call `new` and keep no describe-scoped variables. Page objects themselves import `test` from `@playwright/test` for `test.step()` (importing the fixtures file there would be a cycle).
 - `src/tests/{feature}.spec.ts`; `test.describe('Feature', { tag: ['@smoke'] }, …)` — tags are options, not title suffixes.
 - Web-first assertions only (`await expect(locator).toBeVisible()`); no `waitForTimeout()`, no `{ force: true }`, no `test.only` (CI forbids it).
 - Every test must pass alone and in parallel with the others; no shared mutable state between tests.
@@ -65,7 +67,7 @@ Import through the tsconfig aliases: `@pages/*`, `@tests/*`, `@helpers/*`, `@tes
 
 ### Quality gates
 
-`npm run lint`, `npm run typecheck` and `npm run format:check` must pass; CI runs them together with `skills:check` and a check that the Dockerfile's Playwright image tag equals the installed `@playwright/test` version, plus a `docker` job that builds the image and runs the suite inside it (`make docker-test`). Bumping `@playwright/test` means bumping the Dockerfile tag and digest and re-running `npm run skills:sync`.
+`npm run lint` (type-aware: `@typescript-eslint/no-floating-promises` fails on an un-awaited action or assertion), `npm run typecheck` and `npm run format:check` must pass; CI runs them together with `skills:check` and a check that the Dockerfile's Playwright image tag equals the installed `@playwright/test` version, plus a `docker` job that builds the image and runs the suite inside it (`make docker-test`). Bumping `@playwright/test` means bumping the Dockerfile tag and digest and re-running `npm run skills:sync`.
 
 ### Dependency updates
 

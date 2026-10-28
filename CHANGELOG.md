@@ -21,12 +21,15 @@
 
 - CI job `docker` builds the image and runs the suite inside it with `make docker-test`. Before, only the image tag was grepped, so a broken Dockerfile (like the `chown` fix in 2.0.0) went unnoticed.
 - The Dockerfile pins the base image digest (multi-arch OCI index) next to the tag; Dependabot updates both.
+- `src/fixtures/test-fixture.ts`: `test` extended with a `homePage` fixture, `expect` re-exported; `@fixtures/*` alias. The example spec takes `homePage` from the fixture instead of a describe-scoped `let` filled in `beforeEach`. `skills:sync` passes `--fixture-import-path @fixtures/test-fixture`, so the generated references now tell agents to import from the fixtures file (regenerated output committed).
+- ESLint runs `typescript-eslint` `recommendedTypeChecked` with `projectService`: `no-floating-promises` and `no-misused-promises` now fail an un-awaited `page.goto()` or page-object action, which previously passed lint and tsc and silently weakened the test.
 
 ### Fixed
 
 - `make docker-test` exits with the test run's status; the leading `-` on the `docker run` line made the target succeed even when tests failed. `BASE_URL` from the host is passed into the container.
 - `video` is `on-first-retry` on CI (mirroring `trace`) instead of recording every test and discarding it on pass.
 - `playwright.config.ts` only swallows a missing `.env` (`ENOENT`); any other error loading it surfaces.
+- `src/pages/components/.gitkeep` removed (the directory has a real file).
 
 ## [2.0.0] - 2026-09-09
 

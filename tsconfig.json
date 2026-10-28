@@ -12,6 +12,7 @@
     "baseUrl": ".",
     "paths": {
       "@pages/*": ["src/pages/*"],
+      "@fixtures/*": ["src/fixtures/*"],
       "@tests/*": ["src/tests/*"],
       "@helpers/*": ["src/helpers/*"],
       "@test-data/*": ["src/test-data/*"]
