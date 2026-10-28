@@ -11,12 +11,12 @@ playwright/.cache/
 .auth/
 storage/
 
-# Environment
-.env
-.env.local
-.env.*.local
+# Environment (every variant: .env, .env.local, .env.staging …) except the committed example
+.env*
+!.env.example
 
-# IDE
+# IDE and local agent settings
+.claude/settings.local.json
 .idea/
 .vscode/
 *.swp

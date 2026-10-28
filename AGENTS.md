@@ -66,3 +66,7 @@ Import through the tsconfig aliases: `@pages/*`, `@tests/*`, `@helpers/*`, `@tes
 ### Quality gates
 
 `npm run lint`, `npm run typecheck` and `npm run format:check` must pass; CI runs them together with `skills:check` and a check that the Dockerfile's Playwright image tag equals the installed `@playwright/test` version. Bumping `@playwright/test` means bumping the Dockerfile tag and re-running `npm run skills:sync`.
+
+### Dependency updates
+
+Dependabot opens weekly PRs (npm, GitHub Actions, Docker). `.npmrc` sets `ignore-scripts=true` and `engine-strict=true`, so lifecycle scripts never run on install and the Node floor in `engines` is enforced. A Dependabot PR that bumps `@playwright/test` fails the Dockerfile tag check and `skills:check` on purpose: in that PR, bump the Dockerfile tag to the same version, run `npm run skills:sync`, and commit the regenerated skills so the reviewer sees the instruction diff. A bump of `wico-playwright-agent-skills` needs the same `skills:sync` + commit step.

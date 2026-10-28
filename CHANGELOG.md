@@ -1,5 +1,17 @@
 # Changelog
 
+## [Unreleased]
+
+### Security
+
+- Dependabot configuration for npm (minor and patch bumps grouped, `@playwright/test` alone), GitHub Actions and the Docker base image; Dependabot alerts and security updates enabled on the repository.
+- GitHub Actions pinned to commit SHAs, with the `# vX.Y.Z` comments Dependabot maintains.
+- `.npmrc` with `ignore-scripts=true` (no package in the lockfile has an install script, so installs behave the same) and `engine-strict=true`.
+- `npm audit fix`: `brace-expansion` and `@humanfs/node`, both dev-only transitive dependencies of ESLint, bumped in the lockfile.
+- `.gitignore` covers every `.env*` variant except `.env.example` and `.claude/settings.local.json`; `.dockerignore` excludes `.auth` directories at any depth (Docker patterns are root-relative).
+- `SECURITY.md` and `.github/CODEOWNERS`.
+- README explains that report artifacts (traces, videos, screenshots) carry session data of the application under test and are downloadable from a public repository.
+
 ## [2.0.0] - 2026-09-09
 
 A review of the template against Playwright 1.63, `@playwright/cli` 0.1.19, `wico-playwright-agent-skills` 2.0.0 and the current Playwright CI/Docker guidance. Everything the review found is fixed here; the template is meant to be cloned or used via "Use this template", so nothing is published to npm.

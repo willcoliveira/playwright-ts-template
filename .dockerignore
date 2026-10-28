@@ -11,7 +11,7 @@ all-blob-reports
 .cursor
 .env
 .env.*
-.auth
+**/.auth
 playwright/.cache
 README.md
 CHANGELOG.md
