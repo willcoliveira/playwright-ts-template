@@ -13,6 +13,21 @@
 - `SECURITY.md` and `.github/CODEOWNERS`.
 - README explains that report artifacts (traces, videos, screenshots) carry session data of the application under test and are downloadable from a public repository.
 
+### Breaking
+
+- **Node ≥ 24** (`engines`, enforced by `engine-strict`); `.nvmrc` pins 24.22.2 and `@types/node` is 24. Node 24 is what the Playwright `v1.63.0-noble` image ships, so local, CI and Docker now run the same major (Node 26 became LTS on 2026-10-28, but the image does not carry it yet).
+
+### Added
+
+- CI job `docker` builds the image and runs the suite inside it with `make docker-test`. Before, only the image tag was grepped, so a broken Dockerfile (like the `chown` fix in 2.0.0) went unnoticed.
+- The Dockerfile pins the base image digest (multi-arch OCI index) next to the tag; Dependabot updates both.
+
+### Fixed
+
+- `make docker-test` exits with the test run's status; the leading `-` on the `docker run` line made the target succeed even when tests failed. `BASE_URL` from the host is passed into the container.
+- `video` is `on-first-retry` on CI (mirroring `trace`) instead of recording every test and discarding it on pass.
+- `playwright.config.ts` only swallows a missing `.env` (`ENOENT`); any other error loading it surfaces.
+
 ## [2.0.0] - 2026-09-09
 
 A review of the template against Playwright 1.63, `@playwright/cli` 0.1.19, `wico-playwright-agent-skills` 2.0.0 and the current Playwright CI/Docker guidance. Everything the review found is fixed here; the template is meant to be cloned or used via "Use this template", so nothing is published to npm.

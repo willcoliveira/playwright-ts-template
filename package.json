@@ -5,7 +5,7 @@
   "description": "Playwright + TypeScript project template with AI agent skills (wico) for Claude Code, Cursor, Copilot and Codex.",
   "license": "MIT",
   "engines": {
-    "node": ">=22.13.0"
+    "node": ">=24.0.0"
   },
   "scripts": {
     "test": "playwright test",
@@ -36,7 +36,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.63.0",
-    "@types/node": "^22.19.13",
+    "@types/node": "^24.19.2",
     "eslint": "^10.10.0",
     "eslint-plugin-playwright": "^2.11.0",
     "prettier": "^3.9.6",
