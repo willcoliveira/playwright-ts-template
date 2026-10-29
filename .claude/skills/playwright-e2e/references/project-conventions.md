@@ -4,7 +4,7 @@
 
 ### MUST
 
-1. **MUST** import `test` and `expect` from the project fixtures file once one exists, NOT from `@playwright/test`
+1. **MUST** import `test` and `expect` from `@fixtures/test-fixture`, NOT from `@playwright/test`
 2. **MUST** use web-first assertions (`await expect(locator).toBeVisible()`) — never one-shot checks (`expect(await locator.isVisible()).toBe(true)`)
 3. **MUST** use named timeout constants instead of hardcoded numbers
 4. **MUST** wrap page object methods in `test.step()` for trace reporting

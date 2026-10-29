@@ -112,3 +112,17 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+
+  docker:
+    name: Docker image · build and run the suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Same path as local: build from the Dockerfile, run the suite inside the
+      # image as pwuser, exit with the suite's status.
+      - name: Build the image and run the tests in it
+        run: make docker-test
+        env:
+          BASE_URL: ${{ vars.BASE_URL }}

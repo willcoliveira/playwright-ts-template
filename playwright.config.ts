@@ -5,8 +5,9 @@ import { loadEnvFile } from 'node:process';
 // CI injects its variables directly, so a missing file is not an error.
 try {
   loadEnvFile();
-} catch {
-  /* no .env — fall through to process.env / defaults */
+} catch (error) {
+  // A missing .env is expected (CI); anything else, e.g. an unreadable file, must surface.
+  if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
 }
 
 const isCI = !!process.env.CI;
@@ -38,7 +39,8 @@ export default defineConfig({
     // CI: only on the first retry; locally every failure leaves a trace to open.
     trace: isCI ? 'on-first-retry' : 'retain-on-failure',
     screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
+    // CI: like trace, only on the first retry (recording every test costs CPU on small runners).
+    video: isCI ? 'on-first-retry' : 'retain-on-failure',
     actionTimeout: 10_000,
     navigationTimeout: 30_000,
     testIdAttribute: 'data-testid',

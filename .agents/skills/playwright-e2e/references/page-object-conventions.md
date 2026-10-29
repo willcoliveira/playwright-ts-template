@@ -16,7 +16,7 @@
 
 ```typescript
 import type { Page, Locator } from '@playwright/test'
-import { test, expect } from '@playwright/test'
+import { test, expect } from '@fixtures/test-fixture'
 
 export class ExamplePage {
   // Always store page reference

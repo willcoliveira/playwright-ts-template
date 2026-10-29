@@ -4,7 +4,23 @@ import playwright from 'eslint-plugin-playwright';
 
 export default tseslint.config(
   eslint.configs.recommended,
-  ...tseslint.configs.recommended,
+  // Type-aware rules: an un-awaited page action or assertion is a silent false pass in
+  // Playwright, and only no-floating-promises / no-misused-promises catch every case
+  // (playwright/missing-playwright-await only covers expect and a few test APIs).
+  ...tseslint.configs.recommendedTypeChecked,
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+  {
+    // Plain JavaScript (this config file) is outside tsconfig; type-aware rules cannot run on it.
+    files: ['**/*.js', '**/*.mjs'],
+    ...tseslint.configs.disableTypeChecked,
+  },
   {
     ignores: ['node_modules/', 'playwright-report/', 'test-results/', 'blob-report/', 'all-blob-reports/', '.playwright-cli/', 'dist/'],
   },

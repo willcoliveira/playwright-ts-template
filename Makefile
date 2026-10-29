@@ -50,11 +50,13 @@ docker-build: ## Build Docker image
 	docker build -t $(DOCKER_IMAGE) .
 
 .PHONY: docker-test
-docker-test: docker-build ## Build, run the tests in Docker, copy the HTML report to ./playwright-report
+docker-test: docker-build ## Build, run the tests in Docker, copy the HTML report to ./playwright-report (exits with the suite's status)
 	-docker rm -f $(DOCKER_IMAGE)-run >/dev/null 2>&1
-	-docker run --name $(DOCKER_IMAGE)-run --init --ipc=host $(DOCKER_IMAGE) npx playwright test --reporter=list,html
-	rm -rf playwright-report && docker cp $(DOCKER_IMAGE)-run:/app/playwright-report ./playwright-report
-	docker rm $(DOCKER_IMAGE)-run >/dev/null
+	@# One shell: keep the run's exit status, copy the report out, remove the container, then exit with that status.
+	docker run --name $(DOCKER_IMAGE)-run --init --ipc=host -e BASE_URL $(DOCKER_IMAGE) npx playwright test --reporter=list,html; status=$$?; \
+	rm -rf playwright-report && docker cp $(DOCKER_IMAGE)-run:/app/playwright-report ./playwright-report; \
+	docker rm $(DOCKER_IMAGE)-run >/dev/null; \
+	exit $$status
 
 .PHONY: docker-clean
 docker-clean: ## Remove Docker image
