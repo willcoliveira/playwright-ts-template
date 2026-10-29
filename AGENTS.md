@@ -6,7 +6,7 @@ Playwright + TypeScript end-to-end test project. Tests run against `https://play
 
 ## Skills to load
 
-- `.claude/skills/playwright-e2e/SKILL.md` — how tests are planned, written, debugged and reviewed **in this project** (references under `references/`: project conventions, page-object conventions, test generation, debugging, review, fixtures and auth, locators and assertions, CI and flake triage, API testing, pass-rate analysis, agent debugging).
+- `.claude/skills/playwright-e2e/SKILL.md` — how tests are planned, written, debugged and reviewed **in this project** (references under `references/`: shared conventions, operating workflow, delegation rules, project conventions, page-object conventions, test generation, debugging, review, fixtures and auth, locators and assertions, CI and flake triage, API testing, pass-rate analysis, agent debugging).
 - `.claude/skills/playwright-cli/SKILL.md` — driving a browser and debugging a paused test with `playwright-cli`.
 - `.claude/skills/playwright-trace/SKILL.md` — reading a trace with `npx playwright trace`.
 
