@@ -65,7 +65,7 @@ The image is `mcr.microsoft.com/playwright:v<version>-noble`, where the version 
 
 ## CI
 
-`.github/workflows/tests.yml` runs on pushes and pull requests to `main`:
+`.github/workflows/tests.yml` runs on pushes to `main` and on every pull request:
 
 1. **lint** — `eslint`, `tsc --noEmit`, `prettier --check`, `npm run skills:check` (generated skills must be in sync) and the Dockerfile tag check. No browsers are installed here.
 2. **test** — a two-shard matrix (`--shard=N/2`), each uploading a blob report. Set a repository variable `BASE_URL` to test your application instead of the demo target.
@@ -114,7 +114,7 @@ playwright-ts-template/
 ├── .agents/skills/            # The same skills for Cursor, Codex and Copilot
 ├── .cursor/rules/             # Cursor pointer rule
 ├── .github/
-│   ├── workflows/tests.yml    # lint · sharded tests · merged report
+│   ├── workflows/tests.yml    # lint · sharded tests · merged report · docker
 │   ├── instructions/          # Copilot pointer
 │   └── copilot-instructions.md
 ├── playwright.config.ts

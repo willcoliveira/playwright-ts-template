@@ -1,6 +1,6 @@
 {
   "name": "playwright-ts-template",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "private": true,
   "description": "Playwright + TypeScript project template with AI agent skills (wico) for Claude Code, Cursor, Copilot and Codex.",
   "license": "MIT",

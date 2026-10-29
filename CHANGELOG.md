@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [3.0.0] - 2026-10-29
 
 ### Changed
 
@@ -22,7 +22,7 @@
 
 ### Breaking
 
-- **Node ≥ 24** (`engines`, enforced by `engine-strict`); `.nvmrc` pins 24.22.2 and `@types/node` is 24. Node 24 is what the Playwright `v1.63.0-noble` image ships, so local, CI and Docker now run the same major (Node 26 became LTS on 2026-10-28, but the image does not carry it yet).
+- **Node ≥ 24** (`engines`, enforced by `engine-strict`); `.nvmrc` pins 24.22.2 and `@types/node` is 24. Node 24 is what the Playwright `v1.64.1-noble` image ships, so local, CI and Docker now run the same major (Node 26 became LTS on 2026-10-28, but the image does not carry it yet).
 
 ### Added
 
