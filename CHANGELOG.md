@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+### Changed
+
+- `@playwright/test` 1.64.1 and Dockerfile `v1.64.1-noble` (tag and digest) in one change, as the CI tag check requires; the Playwright-owned skills were regenerated (the `playwright-cli` skill's `allowed-tools` narrowed from `Bash(npx:*) Bash(npm:*)` to `Bash(npx playwright:*)`; new reference `pr-attachments.md`).
+- eslint 10.13.0, eslint-plugin-playwright 2.12.1, prettier 3.9.10, typescript-eslint 8.72.1.
+- `wico-playwright-agent-skills` 2.5.0: `SKILL.md` gains `allowed-tools` (`playwright-cli`, `npx playwright`, file tools) and an operating procedure; new references `conventions.md` (shared MUST/SHOULD/WON'T), `workflow.md` and `delegation-rules.md`; `project-conventions.md` is now only the project-specific layer; `fixtures-and-auth.md` documents what `storageState` holds and warns against writing it under `test-results/`.
+- Dependabot ignores major bumps of `typescript` (typescript-eslint declares the supported range) and `@types/node` (follows the Node major in `.nvmrc`).
+
 ### Security
 
 - The workflow runs on every pull request, not only those targeting `main`, so stacked PRs are checked before they are retargeted.

@@ -15,6 +15,13 @@ updates:
         patterns: ['*']
         exclude-patterns: ['@playwright/test']
         update-types: ['minor', 'patch']
+    ignore:
+      # typescript-eslint declares the TypeScript range it supports; bump TypeScript majors by hand when it does.
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
+      # @types/node follows the Node major pinned in .nvmrc and the Playwright image, not npm's latest.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
 
   - package-ecosystem: github-actions
     directory: /
