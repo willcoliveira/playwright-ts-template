@@ -71,6 +71,8 @@ The image is `mcr.microsoft.com/playwright:v<version>-noble`, where the version 
 2. **test** — a two-shard matrix (`--shard=N/2`), each uploading a blob report. Set a repository variable `BASE_URL` to test your application instead of the demo target.
 3. **merge-reports** — downloads the blobs and publishes a single `playwright-report` artifact (7 days).
 
+> **Report artifacts and sensitive data.** Traces and HAR files record request headers (cookies, authorization), response bodies and screenshots of the application under test; videos show it on screen. On a public repository anyone signed in to GitHub can download workflow artifacts. Once `BASE_URL` points at a real application, keep the repository private, or drop the `playwright-report` upload and rely on the `github` reporter annotations instead.
+
 ## Environment variables
 
 `playwright.config.ts` loads a local `.env` (Node's `process.loadEnvFile()`); CI passes variables directly.
@@ -133,6 +135,12 @@ npm run typecheck     # tsc --noEmit
 ```
 
 Prettier and ESLint skip the generated skill directories — their formatting belongs to the generators.
+
+## Dependency updates
+
+Dependabot (`.github/dependabot.yml`) opens weekly PRs for npm packages (minor and patch bumps grouped, `@playwright/test` on its own), the GitHub Actions (pinned to commit SHAs) and the Docker base image. A `@playwright/test` bump fails CI on purpose until the same PR also bumps the Dockerfile tag and re-runs `npm run skills:sync`.
+
+`.npmrc` sets `ignore-scripts=true` (lifecycle scripts never run on install; `npm run …` and `npx` are unaffected) and `engine-strict=true` (installs refuse a Node version outside `engines`).
 
 ## License
 

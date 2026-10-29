@@ -1,0 +1,27 @@
+# Dependabot keeps the three places this template pins versions in step:
+# npm packages, the GitHub Actions in .github/workflows and the Playwright
+# base image in the Dockerfile. A bump of @playwright/test arrives alone and
+# is expected to fail CI until the Dockerfile tag and the generated skills are
+# updated in the same PR — see AGENTS.md "Dependency updates".
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      # One PR for routine minor/patch bumps of the lint and tooling stack.
+      tooling:
+        patterns: ['*']
+        exclude-patterns: ['@playwright/test']
+        update-types: ['minor', 'patch']
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
