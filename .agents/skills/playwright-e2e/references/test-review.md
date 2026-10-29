@@ -17,12 +17,15 @@
 - [ ] No one-shot checks (`expect(await locator.isVisible()).toBe(true)`)
 - [ ] Assertions are explicit in the test body — not hidden behind helpers that silently pass
 - [ ] Prefers positive assertions (`toBeHidden()`, `toBeDisabled()`) over negated ones (`.not.toBeVisible()`)
+- [ ] Every absence assertion (`toBeHidden()`, `.not.toBeVisible()`, `toHaveCount(0)`) has a presence anchor — the same locator asserted visible earlier, or its replacement asserted — because all three pass for a locator that matches nothing
+- [ ] A value the change updates is asserted everywhere the page shows it (summary, header, button), not only in the first place found
 - [ ] Every test has at least one explicit assertion
 
 ### 2. Selectors
 
 - [ ] Follows the selector ladder: `getByRole()` > `getByLabel()` > `getByText()` > `getByTestId()` > CSS
 - [ ] No `first()`/`nth()` used to paper over a `strict mode violation`
+- [ ] Every hand-composed locator (chain, `filter()`, scoped component) was counted on the live page and matched exactly what the test expects
 - [ ] No XPath selectors
 - [ ] Uses `{ exact: true }` where text could match multiple elements
 - [ ] Selectors are stable — not tied to dynamic classes, indexes, or layout
@@ -109,3 +112,6 @@ When performing a review, report findings using this format:
 | `CRITICAL` | Breaks reliability, violates MUST rules, or fails quality gates | Must fix before merge |
 | `WARNING` | Violates SHOULD rules or introduces maintainability risk | Should fix before merge |
 | `INFO` | Suggestion for improvement, not blocking | Fix at your discretion |
+
+When a finding sits between two levels, **go one level lower**. An inflated severity gets the whole
+report discounted; an understated one still gets read, and the reviewer can raise it.

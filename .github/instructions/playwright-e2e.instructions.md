@@ -14,6 +14,7 @@ Full guidance for playwright-ts-template lives in the `playwright-e2e` skill at 
 - Use short inner timeouts inside `toPass` blocks
 - Clean up test resources in `afterEach`
 - Tag tests with `{ tag: ['@smoke'] }` options, not in the title
+- Give every absence assertion (`toBeHidden()`, `toHaveCount(0)`) a presence anchor — prove the same locator matched first
 
 ## WON'T
 - Use XPath selectors
@@ -24,8 +25,15 @@ Full guidance for playwright-ts-template lives in the `playwright-e2e` skill at 
 - Write custom retry/polling loops (use `toPass()` or `expect.poll()`)
 - Use `page.evaluate()` as a workaround for missing locators
 
+## Working method
+- **Explore before generate** — resolve every selector against a real page, never from source
+- **Below 5, emit no plan** — a low confidence score means keep exploring, not caveat the proposal
+- **A skeleton counts as a placeholder** — `TODO`s and empty methods are not deliverables
+- **No substitute exploration** — if `playwright-cli` is unavailable, stop and say so
+- **Stop before applying** — emit the plan, wait for approval
+
 ## Selector Priority
-1. `getByRole()` > 2. `getByLabel()` > 3. `getByText()` > 4. `getByTestId()` > 5. CSS selector
+1. `getByRole()` > 2. `getByLabel()` > 3. `getByText()` / `getByPlaceholder()` / `getByAltText()` > 4. `getByTestId()` > 5. CSS selector
 
 ## Browser automation
 Use the official `playwright-cli` skill (install with `npx playwright cli install --skills=agents`); debug failing tests with `npx playwright test --debug=cli` and `playwright-cli attach` as described in `.agents/skills/playwright-e2e/references/agent-debugging.md`.

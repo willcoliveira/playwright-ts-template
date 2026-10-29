@@ -10,13 +10,17 @@ One green run proves nothing about a suite that talks to a real network. Run it 
 consecutively, keep every run's raw output, and report the distribution.
 
 ```bash
-node scripts/run-5x.mjs 5
+mkdir -p runs
+for i in 1 2 3 4 5; do
+  npx playwright test --reporter=json > /dev/null 2>&1 || true
+  cp test-results/results.json "runs/run-$i.json"
+done
 ```
 
-The script runs the suite N times, copies `test-results/results.json` to `runs/run-N.json` after
-each, and writes a summary. **Copy the file rather than relying on an environment variable to
-redirect the reporter** — that precedence has changed between Playwright versions and the failure
-is silent.
+`|| true` keeps the loop going when a run fails — a failing run is data, not a reason to stop.
+**Copy the file rather than relying on an environment variable to redirect the reporter** — that
+precedence has changed between Playwright versions and the failure is silent, which costs you the
+whole run.
 
 ## Four outcomes, not two
 
@@ -35,6 +39,39 @@ A suite that is green because six defects still reproduce is not the same claim 
 everything works. Report them in separate columns or the number is misleading, and the person
 reading it will draw the wrong conclusion at exactly the wrong moment.
 
+## Make the build notice
+
+Measuring determinism by hand is what this file is for. Keeping it from regressing is a config line:
+
+```typescript
+failOnFlakyTests: !!process.env.CI,   // Playwright 1.63+
+```
+
+The run exits non-zero when any test passed only on retry. That does not make the suite
+deterministic — it makes the loss of determinism arrive as a red build on the day it happens, rather
+than as a number somebody notices a quarter later. Keep `retries` where they are: you still want the
+artifacts from the retry, you just no longer want the green tick that came with them.
+
+## A test that did not run is not evidence
+
+The four outcomes above describe tests that executed. Every run also produces tests that did not,
+and folding those into a percentage is how a suite comes to be described as green when a third of
+it never started.
+
+| What happened | Treat it as |
+| --- | --- |
+| Skipped by a condition (`test.skip(cond, reason)`) | **Not run** — name the condition in the report |
+| Skipped unconditionally, or `test.fixme` | **Not run** — and it is a debt, not a result |
+| Never started because a setup project or dependency failed | **Blocked** — the cause is the finding, not the count |
+| Interrupted when the run was cancelled or sharded off | **Not run** — the sample is incomplete, say so |
+
+Report these as their own number next to the pass rate, never inside it. "142 of 150 passed, 8 not
+run" is a result someone can act on. "95%" is not, and it is the same figure.
+
+The same applies to a test that ran and proved nothing — one whose assertion cannot distinguish the
+behaviour working from the page never loading. It is not a pass. It is an unverified case wearing a
+green tick, and it is worth more to say so than to keep the number tidy.
+
 ## Stability is per test, not per run
 
 Five green runs can still hide a test that passed for a different reason each time. Record every
@@ -45,6 +82,40 @@ const unstable = [...outcomes.entries()].filter(([, o]) => new Set(o).size > 1)
 ```
 
 That list, not the aggregate, is the honest answer to "is this deterministic".
+
+## Measure a flake before and after, with retries off
+
+A fix for an intermittent failure is a claim that its rate went down, and a claim about a rate needs
+a rate on both sides. Before changing anything, run the one test enough times to see it fail, with
+retries off so every failure is counted as one:
+
+```bash
+npx playwright test tests/checkout.spec.ts -g "pays" --repeat-each=30 --retries=0
+```
+
+Write the result down as failures out of runs: 6 of 30. After the fix, run the same command again,
+with at least as many repeats. If the measurement before the fix shows no failures, you have not
+reproduced it — that is the finding, and a change made now cannot be shown to have done anything.
+
+**Size the run count to the claim.** Zero failures in *n* runs does not mean a rate of zero. At 95%
+confidence it means the rate is below roughly **3/n** — the rule of three:
+
+| Clean runs | The rate is below about |
+| ---: | ---: |
+| 3 | no useful bound |
+| 10 | 30% |
+| 30 | 10% |
+| 100 | 3% |
+| 300 | 1% |
+
+Three green runs miss a test that fails half the time once in eight tries (0.5³ = 12.5%), and miss a
+one-in-five flake about half the time (0.8³ ≈ 51%). So choose *n* after the fix so that 3/*n* is at
+most half the rate you measured before it: a test that failed 6 of 30 times (20%) needs at least 30
+clean runs before "fixed" means the rate halved, and more before it means gone. Say the bound in the
+report — "0 of 60, so below about 5%" — rather than "it passes now".
+
+A failure that reproduced on every run is a different claim. A handful of green runs shows the
+deterministic failure is gone; it says nothing about whether the fix introduced a flake of its own.
 
 ## The table
 

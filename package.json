@@ -42,6 +42,6 @@
     "prettier": "^3.9.10",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.72.1",
-    "wico-playwright-agent-skills": "^2.0.0"
+    "wico-playwright-agent-skills": "^2.5.0"
   }
 }
